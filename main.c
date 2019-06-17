@@ -173,7 +173,30 @@ int push_end(node_t * head_node, int val)
 
 int main()
 {
+    node_t * head = NULL;
+    head = create_node(99);
 
+    if(head == NULL)
+    {
+        return 1337; /** Lets me know that it failed to create the head node **/
+    }
+
+    for(int i = 0; i < 10; i++)
+    {
+        push_end(head,i);
+    }
+
+    pop(&head);
+
+    push_end(head,1337);
+
+    print_nodes(head);
+
+    pop_end(head);
+
+    print_nodes(head);
+
+    clear_nodes(head);
 
     return 0;
 }
