@@ -28,9 +28,10 @@ node_t * create_node(int val)
 /** Deletes a node **/
 int delete_node(node_t * node)
 {
+    int node_val = node->val;
     free(node);
     node = NULL;
-    printf("Node removed\n");
+    printf("Node removed: val->%d\n",node_val);
     return (node == NULL);
 }
 
@@ -95,27 +96,71 @@ int pop(node_t ** head_node)
     return delete_node(head);
 }
 
+int pop_at_index(node_t ** head_node,int index)
+{
+    if(index == 0)
+    {
+        return pop(head_node);
+    }
+
+    printf("\nGoing to remove node at index: %d\n",index);
+
+    node_t * current = *head_node;
+    node_t * prev_node;
+    int counter = 0;
+
+    while(current != NULL)
+    {
+        // index reached
+        if(counter == index)
+        {
+            if(current->next == NULL)
+            {
+                prev_node->next = NULL;
+            }
+            else
+            {
+                prev_node->next = current->next;
+            }
+            return delete_node(current);
+        }
+
+        if(current->next == NULL)
+        {
+            printf("Node at index: %d not found\n",index);
+            return FALSE;
+        }
+
+        prev_node = current;
+        current = current->next;
+        counter++;
+    }
+
+    printf("Failed to remove node at index: %d\n",index);
+    return FALSE;
+}
+
 /** Removes the last node **/
 int pop_end(node_t * head_node)
 {
     node_t * current = head_node;
     node_t * prev_node;
 
-    printf("Going to remove node at end\n");
+    printf("\nRemoving last node\n");
 
     while(current != NULL)
     {
-       if(current->next == NULL)
-       {
-           prev_node->next = NULL;
-           current = NULL;
-           return delete_node(current);
-       }
+        // Found last node
+        if(current->next == NULL)
+        {
+            prev_node->next = NULL;
+            return delete_node(current);;
+        }
 
-       prev_node = current;
-       current = current->next;
+        prev_node = current;
+        current = current->next;
     }
-    fprintf(stderr,"Failed to remove node at end\n");
+    printf("Failed to remove last node\n");
     return FALSE;
 }
 
@@ -137,6 +182,50 @@ int push(node_t ** head_node, int val)
     *head_node = new_node;
     printf("Node added at the begin\n");
     return TRUE;
+}
+
+/** Add a node at a given index **/
+int push_at_index(node_t ** head_node, int index, int val)
+{
+    if(index == 0)
+    {
+        return push(head_node,val);
+    }
+
+    printf("Going to insert node at index: %d\n", index);
+
+    node_t * current = *head_node;
+    node_t * prev_node;
+    int counter = 0;
+
+    while(current != NULL)
+    {
+        // reached insert point
+        if(counter == index)
+        {
+            node_t * new_node = create_node(val);
+            prev_node->next = new_node;
+            new_node->next = current;
+            printf("Inserted node at index: %d\n",index);
+            return TRUE;
+        }
+
+        // reached end of the list
+        if(current->next == NULL)
+        {
+            node_t * new_node = create_node(val);
+            current->next = new_node;
+            printf("%d is bigger than list size, node added at the end",index);
+            return TRUE;
+        }
+
+        counter++;
+        prev_node = current;
+        current = current->next;
+    }
+
+    printf("Failed to insert node t index: %d\n", index);
+    return FALSE;
 }
 
 /** Adds a node at the end **/
@@ -174,7 +263,7 @@ int push_end(node_t * head_node, int val)
 int main()
 {
     node_t * head = NULL;
-    head = create_node(99);
+    head = create_node(-1);
 
     if(head == NULL)
     {
@@ -183,16 +272,15 @@ int main()
 
     for(int i = 0; i < 10; i++)
     {
-        push_end(head,i);
+        push(&head,i*i);
+        printf("\n");
     }
 
-    pop(&head);
-
-    push_end(head,1337);
-
-    print_nodes(head);
+    push_at_index(&head,0,15);
 
     pop_end(head);
+
+    pop_at_index(&head,8);
 
     print_nodes(head);
 
