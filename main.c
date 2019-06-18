@@ -9,6 +9,10 @@ typedef struct node{
     struct node  * next;
 } node_t;
 
+typedef union {
+
+}node_data;
+
 /** Creates a new node **/
 node_t * create_node(int val)
 {
@@ -166,6 +170,43 @@ int pop_end(node_t * head_node)
     return FALSE;
 }
 
+/** Remove a node when the value equals x **/
+int pop_at_value(node_t * head_node, int value)
+{
+    node_t * current = head_node;
+    node_t * prev_node;
+
+    printf("\nGoing to remove node if value equals %d\n",value);
+
+    while(current != NULL)
+    {
+        if(current->val == value)
+        {
+            if(current->next != NULL)
+            {
+                prev_node->next = current->next;
+            }
+            else
+            {
+                prev_node->next = NULL;
+            }
+            return delete_node(current);
+        }
+
+        if(current->next == NULL)
+        {
+            printf("Failed to find node with value: %d\n",value);
+            return FALSE;
+        }
+
+        prev_node = current;
+        current = current->next;
+    }
+
+    printf("Failed to remove node\n");
+    return FALSE;
+}
+
 /** Add a node at the start of the node **/
 int push(node_t ** head_node, int val)
 {
@@ -217,7 +258,7 @@ int push_at_index(node_t ** head_node, int index, int val)
         {
             node_t * new_node = create_node(val);
             current->next = new_node;
-            printf("%d is bigger than list size, node added at the end",index);
+            printf("%d is bigger than list size, node added at the end\n",index);
             return TRUE;
         }
 
@@ -269,23 +310,19 @@ int main()
 
     if(head == NULL)
     {
-        return 1337; /** Lets me know that it failed to create the head node **/
+        return 1337;
     }
-
     for(int i = 0; i < 10; i++)
     {
         push(&head,i*i);
         printf("\n");
     }
-
-    push_at_index(&head,0,15);
-
+    push_at_index(&head,8985,158);
     pop_end(head);
-
     pop_at_index(&head,8);
-
+    pop_at_value(head,4);
+    pop_at_value(head,4);
     print_nodes(head);
-
     clear_nodes(head);
 
     return 0;
