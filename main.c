@@ -96,6 +96,7 @@ int pop(node_t ** head_node)
     return delete_node(head);
 }
 
+/** Removes a node at the given index **/
 int pop_at_index(node_t ** head_node,int index)
 {
     if(index == 0)
@@ -125,6 +126,7 @@ int pop_at_index(node_t ** head_node,int index)
             return delete_node(current);
         }
 
+        // end of the list
         if(current->next == NULL)
         {
             printf("Node at index: %d not found\n",index);
