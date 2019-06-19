@@ -33,7 +33,6 @@ node_t * create_node(int val)
 int create_empty_list(node_t ** head)
 {
     node_t * head_node = create_node(-1);
-    head_node->headData.initialData = FALSE;
 
     if(head_node == NULL)
     {
@@ -51,7 +50,6 @@ int create_empty_list(node_t ** head)
 int create_list(node_t ** head,int initial_value)
 {
     node_t * head_node = create_node(initial_value);
-    head_node->headData.initialData  = TRUE;
 
     if(head_node == NULL)
     {
