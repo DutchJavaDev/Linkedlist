@@ -7,8 +7,10 @@ int main()
     node_t * list_one;
     node_t * list_two;
 
-    create_list(&list_one,-1);
-    create_list(&list_two,-1);
+    create_empty_list(&list_one);
+    create_list(&list_two,5);
+
+    push(&list_one,5);
 
     for(int i = 0; i < 5; i++)
     {
