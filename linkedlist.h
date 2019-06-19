@@ -2,14 +2,16 @@
 #define TRUE 1
 #define FALSE 0
 
+typedef union {
+    int initialData;
+}node_data;
+
 typedef struct node{
     int val;
     struct node  * next;
+    node_data headData;
 } node_t;
 
-typedef union {
-
-}node_data;
 
 /** Creates a new node **/
 node_t * create_node(int val)
@@ -27,10 +29,11 @@ node_t * create_node(int val)
     return new_node;
 }
 
-/** Creates a new linked list **/
-int create_list(node_t ** head,int initial_value)
+/** Creates a linked list with the initial to be null **/
+int create_empty_list(node_t ** head)
 {
-    node_t * head_node = create_node(initial_value);
+    node_t * head_node = create_node(-1);
+    head_node->headData.initialData = FALSE;
 
     if(head_node == NULL)
     {
@@ -38,6 +41,25 @@ int create_list(node_t ** head,int initial_value)
         return FALSE;
     }
 
+    head_node->headData.initialData = FALSE;
+    *head = head_node;
+    printf("Created linked list\n");
+    return TRUE;
+}
+
+/** Creates a new linked list **/
+int create_list(node_t ** head,int initial_value)
+{
+    node_t * head_node = create_node(initial_value);
+    head_node->headData.initialData  = TRUE;
+
+    if(head_node == NULL)
+    {
+        printf("Failed to create new list, malloc failed\n");
+        return FALSE;
+    }
+
+    head_node->headData.initialData = TRUE;
     *head = head_node;
     printf("Created linked list\n");
     return TRUE;
@@ -226,6 +248,14 @@ int push(node_t ** head_node, int val)
 {
     printf("Going to add node at the begin\n");
     node_t * head = *head_node;
+
+    if(head->headData.initialData == FALSE)
+    {
+        head->val = val;
+        head->headData.initialData = TRUE;
+        printf("List was created with no initial value, %d has been placed at the head\n",val);
+        return TRUE;
+    }
 
     node_t * new_node = create_node(val);
 
