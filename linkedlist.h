@@ -1,4 +1,3 @@
-
 #define TRUE 1
 #define FALSE 0
 
@@ -12,6 +11,27 @@ typedef struct node{
     node_data headData;
 } node_t;
 
+/** Get the amount of items in the list **/
+int get_count(node_t * head_node)
+{
+    node_t * current = head_node;
+
+    int list_size = 0;
+
+    while(current != NULL)
+    {
+        if(current->next == NULL)
+        {
+            list_size++;
+            break;
+        }
+
+        current = current->next;
+        list_size++;
+    }
+
+    return list_size;
+}
 
 /** Creates a new node **/
 node_t * create_node(int val)
