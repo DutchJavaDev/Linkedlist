@@ -364,3 +364,37 @@ int push_end(node_t * head_node, int val)
     fprintf(stderr,"Failed to add node at the end\n");
     return FALSE;
 }
+
+/** Reverses the linked list **/
+int reverse_list(node_t ** head)
+{
+    node_t * next_node = (*head)->next;
+    node_t * prev_node = *head;
+    node_t * temp_node;
+
+    (*head)->next = NULL;
+    node_data * head_data = &(*head)->headData;
+
+    while(next_node != NULL)
+    {
+        temp_node = next_node->next;
+
+        if(temp_node == NULL)
+        {
+            /** Reached end node **/
+            next_node->next = prev_node;
+            next_node->headData = *head_data;
+            *head = next_node;
+            return TRUE;
+        }
+
+        /** Reversing the the connections **/
+        next_node->next = prev_node;
+
+        prev_node = next_node;
+
+        next_node = temp_node;
+    }
+
+    return FALSE;
+}
