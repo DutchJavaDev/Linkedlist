@@ -375,6 +375,8 @@ int reverse_list(node_t ** head)
     (*head)->next = NULL;
     node_data * head_data = &(*head)->headData;
 
+    printf("Going to reverse list\n");
+
     while(next_node != NULL)
     {
         temp_node = next_node->next;
@@ -385,6 +387,7 @@ int reverse_list(node_t ** head)
             next_node->next = prev_node;
             next_node->headData = *head_data;
             *head = next_node;
+            printf("List reversed\n");
             return TRUE;
         }
 
@@ -396,5 +399,6 @@ int reverse_list(node_t ** head)
         next_node = temp_node;
     }
 
+    printf("Failed to reverse list\n");
     return FALSE;
 }
