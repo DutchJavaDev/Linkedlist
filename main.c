@@ -16,6 +16,9 @@ int main()
     }
 
     print_nodes(list_one);
+    reverse_list(&list_one);
+    reverse_list(&list_one);
+    print_nodes(list_one);
     printf("\nitem count of list_one: %i\n\n",get_count(list_one));
 
 
