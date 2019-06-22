@@ -1,5 +1,6 @@
 #define TRUE 1
 #define FALSE 0
+#define NODE_SIGNATURE 110
 
 typedef union {
     int initialData;
@@ -7,6 +8,7 @@ typedef union {
 
 typedef struct node{
     int val;
+    char base;
     struct node  * next;
     node_data headData;
 } node_t;
@@ -60,6 +62,7 @@ node_t * create_empty_list()
         exit(EXIT_FAILURE);
     }
 
+    head_node->base = NODE_SIGNATURE;
     head_node->headData.initialData = FALSE;
     return head_node;
 }
@@ -75,8 +78,8 @@ node_t * create_list(int initial_value)
         exit(EXIT_FAILURE);
     }
 
+    head_node->base = NODE_SIGNATURE;
     head_node->headData.initialData = TRUE;
-
     return head_node;
 }
 
@@ -92,8 +95,8 @@ void delete_node(node_t * node)
 /** Prints out all the elements of the linked list **/
 void print_nodes(node_t * head)
 {
-    /**TODO: this check does not work**/
-    if(head == NULL)
+    /** empty node **/
+    if(head->base != NODE_SIGNATURE)
     {
         printf("Head is null\n");
         exit(EXIT_FAILURE);
@@ -113,6 +116,13 @@ void print_nodes(node_t * head)
 /** Free up all the memory allocated by the nodes**/
 void clear_nodes(node_t * head_node)
 {
+
+    if(head_node->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     node_t * current = head_node;
     node_t * prev_node;
 
@@ -138,10 +148,17 @@ void clear_nodes(node_t * head_node)
 /** Removes the node item of the list **/
 void pop(node_t ** head_node)
 {
+    if((*head_node)->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     printf("Going to remove first node\n");
 
     node_t * head = *head_node;
     node_t * new_head = head->next;
+    new_head->base = NODE_SIGNATURE;
 
     *head_node = new_head;
 
@@ -151,6 +168,12 @@ void pop(node_t ** head_node)
 /** Removes a node at the given index **/
 void pop_at_index(node_t ** head_node,int index)
 {
+    if((*head_node)->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     if(index == 0)
     {
         pop(head_node);
@@ -199,6 +222,12 @@ void pop_at_index(node_t ** head_node,int index)
 /** Removes the last node **/
 void pop_end(node_t * head_node)
 {
+    if(head_node->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     node_t * current = head_node;
     node_t * prev_node;
 
@@ -224,6 +253,12 @@ void pop_end(node_t * head_node)
 /** Remove a node when the value equals x **/
 void pop_at_value(node_t * head_node, int value)
 {
+    if(head_node->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     node_t * current = head_node;
     node_t * prev_node;
 
@@ -262,6 +297,12 @@ void pop_at_value(node_t * head_node, int value)
 /** Add a node at the start of the node **/
 void push(node_t ** head_node, int val)
 {
+    if((*head_node)->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     printf("Going to add node at the begin\n");
     node_t * head = *head_node;
 
@@ -282,6 +323,7 @@ void push(node_t ** head_node, int val)
     }
 
     new_node->next = head;
+    new_node->base = NODE_SIGNATURE;
     *head_node = new_node;
     printf("Node added at the begin\n");
 }
@@ -289,6 +331,12 @@ void push(node_t ** head_node, int val)
 /** Add a node at a given index **/
 void push_at_index(node_t ** head_node, int index, int val)
 {
+    if((*head_node)->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     if(index == 0)
     {
         push(head_node,val);
@@ -334,6 +382,12 @@ void push_at_index(node_t ** head_node, int index, int val)
 /** Adds a node at the end **/
 void push_end(node_t * head_node, int val)
 {
+    if(head_node->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     node_t * current = head_node;
 
     printf("Going to add a node at the end\n");
@@ -366,6 +420,12 @@ void push_end(node_t * head_node, int val)
 /** Reverses the linked list **/
 void reverse_list(node_t ** head)
 {
+    if((*head)->base != NODE_SIGNATURE)
+    {
+        printf("Head is null");
+        exit(EXIT_FAILURE);
+    }
+
     node_t * next_node = (*head)->next;
     node_t * prev_node = *head;
     node_t * temp_node;
@@ -384,6 +444,9 @@ void reverse_list(node_t ** head)
             /** Reached end node **/
             next_node->next = prev_node;
             next_node->headData = *head_data;
+            next_node->base = NODE_SIGNATURE;
+
+            (*head)->base = 0;
             *head = next_node;
             printf("List reversed\n");
             return;
