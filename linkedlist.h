@@ -3,17 +3,18 @@
 
 #define TRUE 1
 #define FALSE 0
-#define NODE_SIGNATURE 110
+#define NODE_nodeSignature 110
 
 #define ERROR_MALLOC_FAILED 2
 #define ERROR_NODE_NULL 3
 
 typedef struct
 {
-    void* Data;
-    struct NODE* Next;
-    char Signature;
+    void* nodeData;
+    struct NODE* nextNode;
+    char nodeSignature;
 } NODE;
+
 /// Debug purpose
 void print_nodes_int(NODE* head)
 {
@@ -21,9 +22,9 @@ void print_nodes_int(NODE* head)
 
     while(current != NULL)
     {
-        printf("node value: %d\n",(int)current->Data);
+        printf("node value: %d\n",(int)current->nodeData);
 
-        current = current->Next;
+        current = current->nextNode;
     }
     printf("\n\n");
 }
@@ -36,13 +37,13 @@ void delete_all_nodes(NODE* head)
     while(current != NULL)
     {
         NODE* temp = current;
-        current = current->Next;
+        current = current->nextNode;
         delete_node(temp);
     }
 }
 
 /// Creates a new node with a given value
-int create_node(void* node_data, NODE** _node)
+int create_node(void* node_nodeData, NODE** _node)
 {
     NODE* node = (NODE*) malloc(sizeof(NODE));
 
@@ -51,15 +52,15 @@ int create_node(void* node_data, NODE** _node)
         return ERROR_MALLOC_FAILED;
     }
 
-    node->Data = node_data;
-    node->Signature = NODE_SIGNATURE;
-    node->Next = NULL;
+    node->nodeData = node_nodeData;
+    node->nodeSignature = NODE_nodeSignature;
+    node->nextNode = NULL;
 
     *_node = node;
     return TRUE;
 }
 
-/// Creates a node with data set to NULL
+/// Creates a node with nodeData set to NULL
 int create_node_empty(NODE** node)
 {
     return create_node(NULL,node);
@@ -68,27 +69,34 @@ int create_node_empty(NODE** node)
 /// Frees the memory the node has being using, sets the value to NULL
 int delete_node(NODE* node)
 {
-    if(node == NULL || node->Signature != NODE_SIGNATURE)
+    if(node == NULL || node->nodeSignature != NODE_nodeSignature)
         return ERROR_NODE_NULL;
 
-    node->Data = NULL;
-    node->Next = NULL;
-    node->Signature = NULL;
+    node->nodeData = NULL;
+    node->nextNode = NULL;
+    node->nodeSignature = NULL;
     free(node);
     return TRUE;
 }
 
 /// Adds a node to the begin of the list, makes the added node the new head
-int push(NODE** head, void* data)
+int push(NODE** head, void* nodeData)
 {
+    if((*head)->nodeData == NULL)
+    {
+        /// No need to create a new node since the head has no data
+        (*head)->nodeData = nodeData;
+        return TRUE;
+    }
+
     NODE* new_head;
-    int result = data == NULL ? create_node_empty(&new_head) : create_node(data,&new_head);
+    int result = nodeData == NULL ? create_node_empty(&new_head) : create_node(nodeData,&new_head);
 
     /// Something bad :(
     if(result > 1)
         return result;
 
-    new_head->Next  = *head;
+    new_head->nextNode  = *head;
 
     *head = new_head;
     return TRUE;
@@ -98,7 +106,7 @@ int push(NODE** head, void* data)
 int pop(NODE** head)
 {
     NODE* current = *head;
-    NODE* new_head = current->Next;
+    NODE* new_head = current->nextNode;
 
     (*head) = new_head;
     delete_node(current);
