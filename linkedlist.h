@@ -16,9 +16,9 @@ typedef struct
 } NODE;
 
 /// Debug purpose
-void print_nodes_int(NODE* head)
+void print_nodes_int(NODE** head)
 {
-    NODE* current = head;
+    NODE* current = *head;
 
     while(current != NULL)
     {
@@ -29,10 +29,49 @@ void print_nodes_int(NODE* head)
     printf("\n\n");
 }
 
-/// Clears the nodes from begin to end
-void delete_all_nodes(NODE* head)
+void print_nodes_float(NODE** head)
 {
-    NODE* current = head;
+    NODE* current = *head;
+
+    while(current != NULL)
+    {
+        printf("node value: %f\n",(int)current->nodeData);
+
+        current = current->nextNode;
+    }
+    printf("\n\n");
+}
+
+void print_nodes_char(NODE** head)
+{
+    NODE* current = *head;
+
+    while(current != NULL)
+    {
+        printf("node value: %c\n",(int)current->nodeData);
+
+        current = current->nextNode;
+    }
+    printf("\n\n");
+}
+
+void print_nodes_string(NODE** head)
+{
+    NODE* current = *head;
+
+    while(current != NULL)
+    {
+        printf("node value: %s\n",(char*)current->nodeData);
+
+        current = current->nextNode;
+    }
+    printf("\n\n");
+}
+
+/// Clears the nodes from begin to end
+void delete_all_nodes(NODE** head)
+{
+    NODE* current = *head;
 
     while(current != NULL)
     {
